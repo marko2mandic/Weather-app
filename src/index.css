@@ -1,0 +1,250 @@
+@import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
+
+@theme {
+  --font-sans: "Nunito", ui-sans-serif, system-ui, sans-serif;
+}
+
+:root {
+  color-scheme: dark;
+  --ink: #ffffff;
+  --ink-soft: rgba(255, 255, 255, 0.72);
+  --ink-faint: rgba(255, 255, 255, 0.5);
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #1c0f45;
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
+}
+
+/* Frosted card used throughout, tinted by the current scene accent */
+.glass {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.04));
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow:
+    0 20px 40px -20px rgba(10, 0, 40, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  /* single blur() only: the minifier joins multiple filter functions without a space, which
+     browsers reject; and keep the unprefixed property last so it survives de-duplication */
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+}
+
+.glass-deep {
+  background: linear-gradient(180deg, rgba(30, 14, 80, 0.55), rgba(20, 8, 60, 0.75));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  -webkit-backdrop-filter: blur(22px);
+  backdrop-filter: blur(22px);
+}
+
+.text-shadow {
+  text-shadow: 0 2px 18px rgba(20, 0, 60, 0.45);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+/* ---------- background scene animations ---------- */
+@keyframes drift {
+  from {
+    transform: translateX(-30vw);
+  }
+  to {
+    transform: translateX(130vw);
+  }
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes sun-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.06);
+    opacity: 1;
+  }
+}
+
+@keyframes fog-roll {
+  from {
+    transform: translateX(-20%);
+  }
+  to {
+    transform: translateX(0%);
+  }
+}
+
+@keyframes shimmer {
+  0%,
+  100% {
+    opacity: 0.15;
+    transform: translateX(0);
+  }
+  50% {
+    opacity: 0.5;
+    transform: translateX(12px);
+  }
+}
+
+@keyframes flag-wave {
+  0%,
+  100% {
+    transform: skewY(0deg) scaleX(1);
+  }
+  50% {
+    transform: skewY(6deg) scaleX(0.92);
+  }
+}
+.flag {
+  animation: flag-wave 2.4s ease-in-out infinite;
+}
+
+/* U1 train crossing the Oberbaumbrücke every ~18 s */
+@keyframes ubahn {
+  0% {
+    transform: translateX(-90px);
+  }
+  55%,
+  100% {
+    transform: translateX(390px);
+  }
+}
+.ubahn {
+  animation: ubahn 18s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.windmill {
+  animation: spin 14s linear infinite;
+}
+
+@keyframes beam {
+  0%,
+  100% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scaleX(0.15);
+    opacity: 0.2;
+  }
+}
+.beam {
+  animation: beam 4s ease-in-out infinite;
+}
+
+@keyframes bob {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(1.5px) rotate(-2deg);
+  }
+}
+.bob {
+  animation: bob 3.5s ease-in-out infinite;
+  transform-origin: 135px 234px;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.5s ease-out both;
+}
+
+.sky-layer {
+  transition: opacity 2.5s ease, background 2.5s ease;
+}
+
+/* OSM tiles recoloured into the app's dark violet palette */
+.tiles-dark {
+  filter: grayscale(1) invert(1) brightness(0.7) contrast(1.15) sepia(0.7) hue-rotate(215deg) saturate(1.8);
+}
+
+/* Leaflet tweaks for the dark card */
+.leaflet-container {
+  background: #1a1040;
+  font-family: var(--font-sans);
+}
+.leaflet-control-attribution {
+  background: rgba(20, 8, 60, 0.6) !important;
+  color: rgba(255, 255, 255, 0.55) !important;
+  font-size: 9px !important;
+}
+.leaflet-control-attribution a {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
+input[type="range"].slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.2);
+  outline: none;
+}
+input[type="range"].slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+}
+input[type="range"].slider::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
